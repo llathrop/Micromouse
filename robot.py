@@ -11,27 +11,30 @@ class Robot(object):
 
         self.location = [0, 0]
         self.heading = 'up'
+        self.possible_headings = ['left','up','right','down']
+        self.possible_rotation = [-90,0,90]
         self.maze_dim = maze_dim
         self.last_movement = 0
         self.last_rotation = 0
         self.last_sensors = [0,1,0]
         self.last_heading =  self.heading
-        self.goal = [self.maze_dim[0]/2,self.maze_dim[1]/2]
+        self.goal = [self.maze_dim/2,self.maze_dim/2]
+        self.map = np.zeros((maze_dim,maze_dim))
+        print self.map
         
     def update_state(self,sensors,rotation,movement):
-        possible_headings = ['left','up','right','down']
-        possible_rotation = [-90,0,90]
-        print possible_headings
+        
+        print self.possible_headings
         
         self.last_movement = movement
         self.last_rotation = rotation
         self.last_sensors = sensors
         self.last_heading = self.heading
         
-        last_heading=possible_headings.index(self.last_heading)
-        heading_rotation=(possible_rotation.index(rotation) -1)
+        last_heading=self.possible_headings.index(self.last_heading)
+        heading_rotation=(self.possible_rotation.index(rotation) -1)
         new_heading=(last_heading+heading_rotation)%3
-        self.heading = possible_headings[new_heading]   # this is pointing wrong somehow. FIXXXXX
+        self.heading = self.possible_headings[new_heading]   # this is pointing wrong somehow. FIXXXXX
         
     def next_move(self, sensors):
         '''
@@ -59,8 +62,27 @@ class Robot(object):
         print 'sensors', sensors
         
         #Locate
+        newX=self.location[0]
+        newY=self.location[1]
+        move_direction=self.possible_headings.index(self.last_heading)
+        print "loc",self.location,"head",move_direction
+        
+        if move_direction ==1:
+            newX=self.location[0]-self.last_movement
+        if move_direction ==2:
+            newY=self.location[1]+self.last_movement
+        if move_direction ==3:
+            newX=self.location[0]+self.last_movement
+        if move_direction ==4:
+            newY=self.location[1]-self.last_movement
+        print newX,newY
+        self.location=[newX],[newY]
+        
         
         #Map
+        self.map[self.location[0],self.location[1]]=1
+        
+        
         
         #take action:        
         rotation = 0
@@ -78,6 +100,7 @@ class Robot(object):
         movement = 1
         
         self.update_state(sensors,rotation,movement)
-        print "rotation:",rotation,"movement:",movement, "heading",self.heading
+   
+        print "rotation:",rotation,"movement:",movement, "heading",self.heading, "\n",self.map
         
         return rotation, movement
