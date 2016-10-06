@@ -65,24 +65,23 @@ class Robot(object):
         newX=self.location[0]
         newY=self.location[1]
         move_direction=self.possible_headings.index(self.last_heading)
-        print "loc",self.location,"head",move_direction
+        print "last loc",self.location,"heading",move_direction
         
-        if move_direction ==1:
+        if move_direction ==0:
             newX=self.location[0]-self.last_movement
-        if move_direction ==2:
+        if move_direction ==1:
             newY=self.location[1]+self.last_movement
-        if move_direction ==3:
+        if move_direction ==2:
             newX=self.location[0]+self.last_movement
-        if move_direction ==4:
+        if move_direction ==3:
             newY=self.location[1]-self.last_movement
-        print newX,newY
-        self.location=[newX],[newY]
-        
+        print "newX,newY", newX,newY
+
+        self.location=[newX,newY]
         
         #Map
         self.map[self.location[0],self.location[1]]=1
-        
-        
+        print "map marked", "\n",self.map
         
         #take action:        
         rotation = 0
@@ -101,6 +100,6 @@ class Robot(object):
         
         self.update_state(sensors,rotation,movement)
    
-        print "rotation:",rotation,"movement:",movement, "heading",self.heading, "\n",self.map
+        print "rotation:",rotation,"movement:",movement, "heading",self.heading
         
         return rotation, movement
