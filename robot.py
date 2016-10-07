@@ -68,16 +68,17 @@ class Robot(object):
         print "last loc",self.location,"heading",move_direction
         
         if move_direction ==0:
-            newX=self.location[0]-self.last_movement
+            newX=self.location[1]-self.last_movement
         if move_direction ==1:
-            newY=self.location[1]+self.last_movement
+            newY=self.location[0]+self.last_movement
         if move_direction ==2:
-            newX=self.location[0]+self.last_movement
+            newX=self.location[1]+self.last_movement
         if move_direction ==3:
-            newY=self.location[1]-self.last_movement
+            newY=self.location[0]-self.last_movement
         print "newX,newY", newX,newY
-
-        self.location=[newX,newY]
+       
+        if newX <=self.maze_dim-1 and newY <=self.maze_dim-1:
+            self.location=[newX,newY]
         
         #Map
         self.map[self.location[0],self.location[1]]=1
